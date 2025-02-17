@@ -1,0 +1,52 @@
+# Flutter/Dart related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# iOS related
+ios/Flutter/.symlinks/
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/.generated/
+
+# Android related
+.android/
+*.iml
+
+# VS Code related
+.vscode/
+
+# IntelliJ related
+.idea/
+
+# macOS related
+macos/Flutter/ephemeral/
+
+# Linux related
+linux/Flutter/ephemeral/
+
+# Windows related
+windows/Flutter/ephemeral/
+
+# Dart specific
+*.dart_tool/
+*.pub-cache/
+
+# JetBrains related
+.idea/
+
+# User-specific files
+*.log
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Google service and credentials files
+google-services.json
+GoogleService-Info.plist
+
