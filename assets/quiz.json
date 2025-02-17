@@ -1,0 +1,55 @@
+{
+    "title": "Economic Activities - Class 6 CBSE Quiz",
+    "quiz": [
+      {
+        "question": "Which of the following is NOT an economic activity?",
+        "options": {
+          "a": "Farming 🌾",
+          "b": "Teaching 👩‍🏫",
+          "c": "Cooking for family 🍽️",
+          "d": "Selling groceries 🏪"
+        },
+        "answer": "c"
+      },
+      {
+        "question": "Mining is an example of which type of economic activity?",
+        "options": {
+          "a": "Primary",
+          "b": "Secondary",
+          "c": "Tertiary",
+          "d": "None of these"
+        },
+        "answer": "a"
+      },
+      {
+        "question": "A doctor working in a hospital is part of which activity?",
+        "options": {
+          "a": "Primary",
+          "b": "Secondary",
+          "c": "Tertiary",
+          "d": "None of these"
+        },
+        "answer": "c"
+      },
+      {
+        "question": "Which sector has fixed working hours and job security?",
+        "options": {
+          "a": "Organized sector",
+          "b": "Unorganized sector",
+          "c": "Both a and b",
+          "d": "None of these"
+        },
+        "answer": "a"
+      },
+      {
+        "question": "Making furniture from wood is an example of which activity?",
+        "options": {
+          "a": "Primary",
+          "b": "Secondary",
+          "c": "Tertiary",
+          "d": "Quaternary"
+        },
+        "answer": "b"
+      }
+    ]
+  }

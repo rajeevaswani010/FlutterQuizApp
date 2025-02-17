@@ -1,192 +1,87 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:quizapp/quiz.dart';
-import 'dart:math';
+import 'package:flutter/services.dart';
+import 'package:quizapp/component/quiz_page.dart';
+import 'package:quizapp/model/quiz_model.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.white),
+      home: Scaffold(
+        appBar: AppBar(title: Text('Centered Scrollable Layout')),
+        body: QuizPage()
+      ),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class QuestionWidget extends StatefulWidget {
+  final String text;
+  final Map<String,String> options;
+  final String? selectedAnswer;
+  final ValueChanged<String?> onChanged;
+
+  QuestionWidget({ 
+    required this.text,
+    required this.options,
+    required this.selectedAnswer, 
+    required this.onChanged
+  });
+
   @override
-  _HomePageState createState() => _HomePageState();
+  State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _HomePageState extends State<HomePage> {
-  Quiz quiz;
-  List<Results> results;
-  Color c;
-  Random random = Random();
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<void> fetchQuestions() async {
-    var res = await http.get("https://opentdb.com/api.php?amount=20");
-    var decRes = jsonDecode(res.body);
-    print(decRes);
-    c = Colors.black;
-    quiz = Quiz.fromJson(decRes);
-    results = quiz.results;
-  }
-
+class _QuestionWidgetState extends State<QuestionWidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Quiz App"),
-        elevation: 0.0,
+    return Card(
+      elevation: 4, // Card elevation for shadow effect
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // Rounded corners
       ),
-      body: RefreshIndicator(
-        onRefresh: fetchQuestions,
-        child: FutureBuilder(
-            future: fetchQuestions(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return Text('Press button to start.');
-                case ConnectionState.active:
-                case ConnectionState.waiting:
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                case ConnectionState.done:
-                  if (snapshot.hasError) return errorData(snapshot);
-                  return questionList();
-              }
-              return null;
-            }),
-      ),
-    );
-  }
-
-  Padding errorData(AsyncSnapshot snapshot) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Error: ${snapshot.error}',
-          ),
+        children: [
           SizedBox(
-            height: 20.0,
-          ),
-          RaisedButton(
-            child: Text("Try Again"),
-            onPressed: () {
-              fetchQuestions();
-              setState(() {});
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  ListView questionList() {
-    return ListView.builder(
-      itemCount: results.length,
-      itemBuilder: (context, index) => Card(
-            color: Colors.white,
-            elevation: 0.0,
-            child: ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      results[index].question,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    FittedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          FilterChip(
-                            backgroundColor: Colors.grey[100],
-                            label: Text(results[index].category),
-                            onSelected: (b) {},
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          FilterChip(
-                            backgroundColor: Colors.grey[100],
-                            label: Text(
-                              results[index].difficulty,
-                            ),
-                            onSelected: (b) {},
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+            height: 200, // Fixed height for upper part
+            child: Container(
+              color: Colors.blue,
+              child: Center(
+                child: Text(
+                  this.widget.text,
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[100],
-                child: Text(results[index].type.startsWith("m") ? "M" : "B"),
-              ),
-              children: results[index].allAnswers.map((m) {
-                return AnswerWidget(results, index, m);
-              }).toList(),
             ),
           ),
-    );
-  }
-}
-
-class AnswerWidget extends StatefulWidget {
-  final List<Results> results;
-  final int index;
-  final String m;
-
-  AnswerWidget(this.results, this.index, this.m);
-
-  @override
-  _AnswerWidgetState createState() => _AnswerWidgetState();
-}
-
-class _AnswerWidgetState extends State<AnswerWidget> {
-  Color c = Colors.black;
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          if (widget.m == widget.results[widget.index].correctAnswer) {
-            c = Colors.green;
-          } else {
-            c = Colors.red;
-          }
-        });
-      },
-      title: Text(
-        widget.m,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: c,
-          fontWeight: FontWeight.bold,
-        ),
+          SizedBox(
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Avoid unnecessary space
+              children: widget.options.entries.map((entry) {
+                return RadioListTile(
+                  title: Text(entry.value),
+                  value: entry.key, 
+                  groupValue: widget.selectedAnswer, 
+                  onChanged: widget.onChanged
+                );
+              }).toList(),
+           ),
+          ),
+        ],
       ),
-    );
+    );    
   }
 }
