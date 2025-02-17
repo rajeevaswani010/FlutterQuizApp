@@ -13,6 +13,7 @@ _QuizPageState createState() => _QuizPageState();
 class _QuizPageState extends State<QuizPage>{
   QuizModel? _quizModel;
   Map<int, String?> _selectedAnswers = {}; // Store selected answers per question
+  int score = 0;
 
   @override
   void initState() {
@@ -31,6 +32,27 @@ class _QuizPageState extends State<QuizPage>{
     });
 
   }
+
+  void _showInfoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Score"),
+          content: Text(),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +81,18 @@ class _QuizPageState extends State<QuizPage>{
                 onChanged: (String? value) {
                   setState(() {
                     _selectedAnswers[index] = value; // Update selected answer
-                    print(_selectedAnswers);
+                    print(_selectedAnswers[index] == _quizModel?.quiz[index].answer);
                   });
                 },
               );
             }).toList(),
             ),
-            ElevatedButton(onPressed: null, child: Text("Submit")),
+            ElevatedButton(
+              onPressed: () {
+                _showInfoDialog(context);
+              }, 
+              child: Text("Submit")
+            ),
           ]
           ),
         ),
@@ -73,4 +100,16 @@ class _QuizPageState extends State<QuizPage>{
     ;
 
   }  
+}
+
+class QuizScore extends StatelessWidget {
+
+  QuizModel? _quizModel;
+  Map<String, int>? answers;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
 }
